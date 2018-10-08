@@ -8,13 +8,6 @@ import java.nio.file.*;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//        BufferedReader reader = new BufferedReader(new FileReader("tekst.txt"));
-//        String line = null;
-//        StringBuilder builder = new StringBuilder();
-//        while((line = reader.readLine()) != null){
-//            builder.append(line);
-//        }
-
         String text = new String(Files.readAllBytes(Paths.get("tekst.txt")));
         System.out.print("Podaj hasło: ");
         Scanner userInput = new Scanner(System.in);
