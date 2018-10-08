@@ -1,36 +1,54 @@
 package pod;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
+import java.nio.file.*;
 
 public class Main {
 
-    public static void main(String[] args) {
-        String key = "vigenere";
-        String text = "Algorytmy i Struktury Danych";
+    public static void main(String[] args) throws IOException {
+//        BufferedReader reader = new BufferedReader(new FileReader("tekst.txt"));
+//        String line = null;
+//        StringBuilder builder = new StringBuilder();
+//        while((line = reader.readLine()) != null){
+//            builder.append(line);
+//        }
+
+        String text = new String(Files.readAllBytes(Paths.get("tekst.txt")));
+        System.out.print("Podaj hasło: ");
+        Scanner userInput = new Scanner(System.in);
+        String key = userInput.nextLine().toLowerCase();
+
+        //dane testowe
+        //String key = "vigenere";
+        //String text = "Algorytmy i Struktury Danych";
 
         encrypt(key, text);
     }
-    static void encrypt(String key, String text){
+    static void encrypt(String key, String text) throws IOException {
         text = text.replaceAll("\\s", "").toLowerCase();
-        List<Character> cipher = new ArrayList<Character>(text.length());
-        List<Character> passphase = new ArrayList<Character>(text.length());
+        String cipher = "";
+        String passphase = "";
 
         for(int i = 0, n = 0; i < text.length(); i++, n++){
             if(n == key.length()) n = 0;
-            passphase.add(key.charAt(n));
-        }
-        cipher.add(passphase.get(0));
-        for(int i = 1, shift, newChar; i < text.length(); i++){
-            shift = passphase.get(i)-97;
-            newChar = (int)text.charAt(i)+shift;
-            if(newChar > 122) newChar = 96+newChar-122;
-            cipher.add((char)newChar);
-            //System.out.println(text.charAt(i) + "->" + cipher.get(i) + "(" + (int)cipher.get(i) + ") ");
+            passphase+=key.charAt(n);
         }
 
-        System.out.println(cipher);
+        for(int i = 0, shift, newChar; i < text.length(); i++){
+            shift = passphase.charAt(i)-97;
+            newChar = (int)text.charAt(i)+shift;
+            if(newChar > 122) newChar = 96+newChar-122;
+            cipher+=(char)newChar;
+            System.out.println(text.charAt(i) + "->" + cipher.charAt(i) + "(ascii: " + (int)cipher.charAt(i) + ") ");
+        }
+
+        System.out.println("Szyfr: " + cipher);
         //System.out.println(passphase);
+        Path file = Paths.get("szyfr.txt");
+        Path file2 = Paths.get("szyfr.sec");
+        Files.write(file, cipher.getBytes(StandardCharsets.UTF_8));
+        Files.write(file2, cipher.getBytes(StandardCharsets.UTF_8));
     }
 }
