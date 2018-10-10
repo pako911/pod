@@ -1,1 +1,1 @@
-# Labolatoria z podstaw ochrony danych
+# Exercises from data security basics
